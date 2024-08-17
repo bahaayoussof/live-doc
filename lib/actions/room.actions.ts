@@ -72,3 +72,22 @@ export const updateDocument = async (roomId: string, title: string) => {
     console.error(`Error happened while updating a room: ${error}`);
   }
 };
+
+export const getDocuments = async (userId: string) => {
+  try {
+    const rooms = await liveblocks.getRooms({ userId });
+    return parseStringify(rooms);
+  } catch (error) {
+    console.error(`Error happened while getting documents: ${error}`);
+  }
+};
+
+export const deleteDocument = async (roomId: string) => {
+  try {
+    const rooms = await liveblocks.deleteRoom(roomId);
+
+    revalidatePath(`/document/`);
+  } catch (error) {
+    console.error(`Error happened while getting documents: ${error}`);
+  }
+};
