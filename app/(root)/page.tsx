@@ -1,6 +1,7 @@
 import AddDocumentBtn from "@/components/AddDocumentBtn";
 import DeleteDocument from "@/components/DeleteDocument";
 import Header from "@/components/Header";
+import { DeleteModal } from "@/components/DeleteModal";
 import { getDocuments } from "@/lib/actions/room.actions";
 import { dateConverter } from "@/lib/utils";
 import { SignedIn, UserButton } from "@clerk/nextjs";
@@ -63,7 +64,8 @@ const Home = async () => {
                     </p>
                   </div>
                 </Link>
-                <DeleteDocument roomId={id} />
+                {/* <DeleteDocument roomId={id} /> */}
+                <DeleteModal roomId={id}/>
               </li>
             ))}
           </ul>

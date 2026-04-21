@@ -5,6 +5,7 @@ import { liveblocks } from "../liveblocks";
 import { revalidatePath } from "next/cache";
 import { getAccessType, parseStringify } from "../utils";
 import { clerkClient } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export const createDocument = async ({
   userId,
@@ -85,16 +86,20 @@ export const getDocuments = async (userId: string) => {
 
 export const deleteDocument = async (roomId: string) => {
   try {
-    const rooms = await liveblocks.deleteRoom(roomId);
+    await liveblocks.deleteRoom(roomId);
 
-    revalidatePath(`/document/`);
+    revalidatePath(`/`);
+    redirect("/");
   } catch (error) {
     console.error(`Error happened while deleting documents: ${error}`);
   }
 };
 
 export const updateDocumentAccess = async ({
-  roomId, email, userType, updatedBy
+  roomId,
+  email,
+  userType,
+  updatedBy,
 }: ShareDocumentParams) => {
   try {
     const clerk = clerkClient();
@@ -111,28 +116,28 @@ export const updateDocumentAccess = async ({
       usersAccesses,
     });
 
-
-    if(room) {
+    if (room) {
       //TODO:: send email notification
     }
 
     revalidatePath(`/documents/${roomId}`);
     return parseStringify(room);
-
-
   } catch (error) {
     console.log(`Error happened while updating a room access: ${error}`);
   }
-}
+};
 
-
-export const removeCollaborator = async (
-  {roomId, email}: {roomId: string, email: string}) =>
-{
+export const removeCollaborator = async ({
+  roomId,
+  email,
+}: {
+  roomId: string;
+  email: string;
+}) => {
   try {
     const room = await liveblocks.getRoom(roomId);
 
-    if(room.metadata.email === email) {
+    if (room.metadata.email === email) {
       throw new Error("You can't remove yourself from the document");
     }
 
@@ -140,12 +145,11 @@ export const removeCollaborator = async (
       usersAccesses: {
         [email]: null,
       },
-    })
+    });
 
     revalidatePath(`/documents/${roomId}`);
     return parseStringify(updatedRoom);
-
   } catch (error) {
     console.log(`Error happened while removing a collaborator: ${error}`);
   }
-}
+};
