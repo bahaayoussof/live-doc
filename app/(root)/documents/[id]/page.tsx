@@ -16,16 +16,17 @@ const Document = async ({ params: { id } }: SearchParamProps) => {
 
   if (!room) redirect("/");
 
-  //TODO:: Assess the permissions of the user to access the document
   const userIds = Object.keys(room.usersAccesses);
   const users = await getClerkUsers({ userIds });
 
-  const usersData = users.map((user: User) => ({
-    ...user,
-    userType: room.usersAccesses[user.email]?.includes("room:write")
-      ? "editor"
-      : "viewer",
-  }));
+  const usersData = users
+    .filter((user: User) => user)
+    .map((user: User) => ({
+      ...user,
+      userType: room.usersAccesses[user.email]?.includes("room:write")
+        ? "editor"
+        : "viewer",
+    }));
 
   const currentUserType = room.usersAccesses[
     clerkUser.emailAddresses[0].emailAddress
