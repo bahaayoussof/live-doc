@@ -1,5 +1,4 @@
 import AddDocumentBtn from "@/components/AddDocumentBtn";
-import DeleteDocument from "@/components/DeleteDocument";
 import Header from "@/components/Header";
 import { DeleteModal } from "@/components/DeleteModal";
 import { getDocuments } from "@/lib/actions/room.actions";
@@ -10,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Notifications } from "@/components/Notifications";
 
 const Home = async () => {
   const clerkUser = await currentUser();
@@ -19,14 +19,14 @@ const Home = async () => {
   }
 
   const roomDocuments = await getDocuments(
-    clerkUser.emailAddresses[0].emailAddress
+    clerkUser.emailAddresses[0].emailAddress,
   );
 
   return (
     <main className="home-container">
       <Header className="sticky left-0 top-0">
         <div className="flex items-center gap-2 lg:gap-4">
-          Notification
+          <Notifications />
           <SignedIn>
             <UserButton />
           </SignedIn>
@@ -64,8 +64,7 @@ const Home = async () => {
                     </p>
                   </div>
                 </Link>
-                {/* <DeleteDocument roomId={id} /> */}
-                <DeleteModal roomId={id}/>
+                <DeleteModal roomId={id} />
               </li>
             ))}
           </ul>
