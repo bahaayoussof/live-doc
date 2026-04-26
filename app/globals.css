@@ -206,6 +206,11 @@
   height: 52px;
 }
 
+.cl-modalCloseButton {
+  margin-top: 14px;
+  margin-right: 14px;
+}
+
 /* ======================== Liveblocks Override */
 .lb-root {
   --lb-accent-subtle: #0b1527;
